@@ -81,4 +81,7 @@ dependencies {
     implementation project(':plantStatsContract')
     // Domain Module
     implementation project(':domain')
+
+    // Shimmering
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }

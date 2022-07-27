@@ -86,9 +86,18 @@ class PlantDetailFragment : Fragment(R.layout.fragment_plant_detail) {
                 }
             }
 
-            plantPhotos.observe(viewLifecycleOwner) { photos ->
-                photosAdapter.submitList(photos)
-                binding.clPlantGallery.isVisible = photos.isNotEmpty()
+            plantPhotosUiState.observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    is PlantDetailViewModel.PlantPhotosUiState.InitialState -> {
+                        binding.rvPlantPhotos.isVisible = false
+                        binding.layoutPlantGalleryShimmering.root.isVisible = true
+                    }
+                    is PlantDetailViewModel.PlantPhotosUiState.PhotosAreLoaded -> {
+                        photosAdapter.submitList(state.photos)
+                        binding.rvPlantPhotos.isVisible = true
+                        binding.layoutPlantGalleryShimmering.root.isVisible = false
+                    }
+                }
             }
         }
     }

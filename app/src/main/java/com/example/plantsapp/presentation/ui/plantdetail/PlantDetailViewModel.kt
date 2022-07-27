@@ -40,9 +40,16 @@ class PlantDetailViewModel @AssistedInject constructor(
         MutableLiveData(PlantDetailUiState.InitialState)
     val plantDetailUiState: LiveData<PlantDetailUiState> get() = _plantDetailUiState
 
+    sealed class PlantPhotosUiState {
+        object InitialState : PlantPhotosUiState()
+        data class PhotosAreLoaded(val photos: List<Pair<Uri, Date>>) : PlantPhotosUiState()
+    }
+
+    private val _plantPhotosUiState: MutableLiveData<PlantPhotosUiState> =
+        MutableLiveData(PlantPhotosUiState.InitialState)
+    val plantPhotosUiState: LiveData<PlantPhotosUiState> get() = _plantPhotosUiState
+
     private lateinit var plant: Plant
-    private val _plantPhotos: MutableLiveData<List<Pair<Uri, Date>>> = MutableLiveData()
-    val plantPhotos: LiveData<List<Pair<Uri, Date>>> get() = _plantPhotos
 
     init {
         viewModelScope.launch {
@@ -56,9 +63,11 @@ class PlantDetailViewModel @AssistedInject constructor(
                         tasks = tasks
                     )
 
-                    _plantPhotos.value = plantPhotosRepository
-                        .getPlantPhotos(plant)
-                        .sortedByDescending { (_, creationDate) -> creationDate.time }
+                    _plantPhotosUiState.value = PlantPhotosUiState.PhotosAreLoaded(
+                        photos = plantPhotosRepository
+                            .getPlantPhotos(plant)
+                            .sortedByDescending { (_, creationDate) -> creationDate.time }
+                    )
                 }
             } catch (e: Exception) {
                 Timber.e(e)
