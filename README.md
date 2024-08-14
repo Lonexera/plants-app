@@ -1,1 +1,1 @@
-# students-lab-app
+# plants-app
