@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    namespace "com.example.statisticsapp"
     compileSdk rootProject.ext.rootCompileSdk
 
     defaultConfig {
