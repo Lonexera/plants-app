@@ -5,6 +5,7 @@ import com.example.plantsapp.di.module.FirebaseQualifier
 import com.example.plantsapp.domain.repository.UserRepository
 import com.example.plantsapp.domain.usecase.AuthUseCase
 import com.example.plantsapp.domain.workmanager.TasksWorkManager
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -21,15 +22,25 @@ class AuthUseCaseImpl @Inject constructor(
 
     @Throws(IllegalStateException::class)
     override suspend fun invoke(input: AuthUseCase.AuthInput) {
-        getSignedInFirebaseUser(input.token)
+        when (input) {
+            is AuthUseCase.AuthInput.Token -> input.getSignedInFirebaseUser()
+            is AuthUseCase.AuthInput.EmailPassword -> input.getSignedInFirebaseUser()
+        }
             ?.let {
                 userRepository.setUser(it.toUser())
                 tasksWorkManager.startWork(startDate = Calendar.getInstance())
             } ?: throw IllegalStateException("Cannot sign in")
     }
 
-    private suspend fun getSignedInFirebaseUser(idToken: String): FirebaseUser? {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+    private suspend fun AuthUseCase.AuthInput.Token.getSignedInFirebaseUser(): FirebaseUser? {
+        val credential = GoogleAuthProvider.getCredential(this.token, null)
+        return auth.signInWithCredential(credential)
+            .await()
+            .user
+    }
+
+    private suspend fun AuthUseCase.AuthInput.EmailPassword.getSignedInFirebaseUser(): FirebaseUser? {
+        val credential = EmailAuthProvider.getCredential(this.email, this.password)
         return auth.signInWithCredential(credential)
             .await()
             .user
