@@ -14,6 +14,22 @@ viewBinding-delegate = "1.4.7"
 glide = "4.12.0"
 # Timber
 timber = "5.0.1"
+# Room
+room = "2.6.1"
+# Tests
+junit = "4.13.2"
+assertj = "3.18.1"
+coroutines-test = "1.5.1"
+# WorkManager
+work-ktx = "2.7.0"
+hilt-work = "1.0.0"
+# Firebase
+firebase-bom = "29.0.0"
+# Play services
+coroutines-play-services = "1.4.1"
+play-services-auth = "19.2.0"
+# Shimmering
+shimmer = "0.5.0"
 
 [libraries]
 # UI
@@ -33,6 +49,32 @@ dagger-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", ver
 # Timber
 jakewharton-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+# Room
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# WorkManager
+androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work-ktx" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hilt-work" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-work" }
+
+# Firebase
+google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+google-firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx", version = "" }
+google-firebase-storage = { module = "com.google.firebase:firebase-storage", version = "" }
+google-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version = "" }
+# Play services
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
+android-gms-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
+
+# Shimmering
+facebook-shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
+
+# Unit test
+junit = { module = "junit:junit", version.ref = "junit" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
