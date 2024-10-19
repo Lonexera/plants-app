@@ -19,7 +19,6 @@ android {
 
     buildFeatures {
         compose = true
-        viewBinding = true
         buildConfig = true
     }
     composeOptions {
@@ -41,11 +40,6 @@ dependencies {
     // Domain Module
     implementation(project(":domain"))
 
-    // UI
-    implementation(libs.androidx.appcompat)
-    implementation(libs.android.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.fragment.ktx)
     // Compose UI
     implementation(libs.core.ktx)
     implementation(libs.activity.compose)
@@ -54,14 +48,14 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    // viewBinding delegate
-    implementation(libs.kirich1409.viewbinding.delegate)
     // Glide
-    implementation(libs.bumptech.glide)
     implementation(libs.bumptech.glide.compose)
     // Hilt
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation)
     // Timber
     implementation(libs.jakewharton.timber)
 }

@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -36,6 +37,7 @@ import com.example.plantsapp.domain.model.Task
 import com.example.statisticsapp.R
 import com.example.statisticsapp.presentation.core.Event
 import com.example.statisticsapp.presentation.model.PlantStatisticsInfo
+import com.example.statisticsapp.presentation.model.TaskStatisticsInfo
 import kotlinx.coroutines.flow.SharedFlow
 
 @Composable
@@ -160,7 +162,7 @@ private fun PlantsWithTasksStatistics(
                         Column {
                             plant.tasks.forEach { task ->
                                 Text(
-                                    text = "${task.task.displayName}: ${task.amount}",
+                                    text = task.displayNameWithAmount(),
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                             }
@@ -172,10 +174,14 @@ private fun PlantsWithTasksStatistics(
     }
 }
 
-private val Task.displayName: String
-    get() = when (this) {
-        is Task.WateringTask -> "Watering"
-        is Task.SprayingTask -> "Spraying"
-        is Task.LooseningTask -> "Loosening"
-        is Task.TakingPhotoTask -> "Taking Photo"
-    }
+@Composable
+private fun TaskStatisticsInfo.displayNameWithAmount(): String =
+    stringResource(
+        id = when (task) {
+            is Task.WateringTask -> R.string.title_watering_task
+            is Task.SprayingTask -> R.string.title_spraying_task
+            is Task.LooseningTask -> R.string.title_loosening_task
+            is Task.TakingPhotoTask -> R.string.title_taking_photo_task
+        },
+        amount
+    )

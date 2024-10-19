@@ -14,6 +14,8 @@ constraintlayout = "2.1.4"
 fragment-ktx = "1.8.4"
 # Compose UI
 compose-bom = "2024.09.02"
+# Navigation
+navigation-compose = "2.8.3"
 # ViewBinding
 viewBinding-delegate = "1.4.7"
 # Glide
@@ -58,6 +60,10 @@ kirich1409-viewbinding-delegate = { module = "com.github.kirich1409:viewbindingp
 # Glide
 bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 bumptech-glide-compose = { module = "com.github.bumptech.glide:compose", version.ref = "glide-compose" }
+
+# Navigation Compose
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+androidx-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidx-hilt" }
 
 # Hilt
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
