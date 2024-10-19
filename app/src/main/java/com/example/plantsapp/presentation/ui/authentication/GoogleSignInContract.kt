@@ -10,9 +10,9 @@ import timber.log.Timber
 
 class GoogleSignInContract(
     val getGoogleSignInClient: () -> GoogleSignInClient
-) : ActivityResultContract<Unit, String?>() {
+) : ActivityResultContract<Unit?, String?>() {
 
-    override fun createIntent(context: Context, input: Unit): Intent {
+    override fun createIntent(context: Context, input: Unit?): Intent {
         return getGoogleSignInClient().signInIntent
     }
 
