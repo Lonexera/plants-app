@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.kirich1409.viewbinding.delegate)
     // Glide
     implementation(libs.bumptech.glide)
+    implementation(libs.bumptech.glide.compose)
     // Hilt
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
