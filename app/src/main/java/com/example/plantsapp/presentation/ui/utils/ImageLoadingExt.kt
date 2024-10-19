@@ -33,4 +33,4 @@ fun Uri?.getBitmapWithPlaceholder(
 }
 
 @DrawableRes
-private const val DEFAULT_PLACEHOLDER = R.drawable.ic_baseline_image_24
+private val DEFAULT_PLACEHOLDER = R.drawable.ic_baseline_image_24

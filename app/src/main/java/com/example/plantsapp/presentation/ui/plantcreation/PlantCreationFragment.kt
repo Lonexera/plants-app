@@ -116,7 +116,7 @@ class PlantCreationFragment : Fragment(R.layout.fragment_plant_creation) {
 
         val frequencyAdapter = ArrayAdapter(
             requireContext(),
-            R.layout.support_simple_spinner_dropdown_item,
+            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
             wateringValueList
         )
 
