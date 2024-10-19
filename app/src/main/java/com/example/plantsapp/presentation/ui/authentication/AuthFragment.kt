@@ -58,8 +58,14 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
 
         with(binding) {
+//            btnGoogleSignIn.setOnClickListener {
+//                googleSignInLauncher.launch(null)
+//            }
             btnGoogleSignIn.setOnClickListener {
-                googleSignInLauncher.launch(null)
+                viewModel.signIn(
+                    email = etEmail.text?.toString().orEmpty(),
+                    password = etPassword.text?.toString().orEmpty(),
+                )
             }
         }
     }

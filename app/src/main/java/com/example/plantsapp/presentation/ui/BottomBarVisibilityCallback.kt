@@ -3,7 +3,6 @@ package com.example.plantsapp.presentation.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.plantsapp.presentation.ui.authentication.AuthFragment
-import com.google.android.gms.common.api.internal.zzc
 
 /** Gets current visible fragment and if it is one of
  * Authentication fragments ([AuthFragment] or [zzc]) returns false
@@ -18,7 +17,7 @@ class BottomBarVisibilityCallback(
 
         val currentVisibleFragment = fm.fragments.last()
         isBottomBarVisible(
-            !(currentVisibleFragment is AuthFragment || currentVisibleFragment is zzc)
+            !(currentVisibleFragment is AuthFragment)
         )
     }
 }
