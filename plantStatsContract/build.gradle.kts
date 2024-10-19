@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id("java-library")
+    id("kotlin")
 }
 
 java {
@@ -18,5 +18,5 @@ kotlin {
 
 dependencies {
     // Domain Module
-    implementation project(':domain')
+    implementation(project(":domain"))
 }
