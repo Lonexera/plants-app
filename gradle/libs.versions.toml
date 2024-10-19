@@ -1,0 +1,42 @@
+[versions]
+agp = "8.3.0"
+kotlin = "1.9.20"
+hilt = "2.52"
+gms = "4.4.2"
+# UI
+appcompat = "1.7.0"
+material = "1.12.0"
+constraintlayout = "2.1.4"
+fragment-ktx = "1.8.4"
+# ViewBinding
+viewBinding-delegate = "1.4.7"
+# Glide
+glide = "4.12.0"
+# Timber
+timber = "5.0.1"
+
+[libraries]
+# UI
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+android-material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment-ktx" }
+# viewBinding delegate
+kirich1409-viewbinding-delegate = { module = "com.github.kirich1409:viewbindingpropertydelegate-noreflection", version.ref = "viewBinding-delegate" }
+# Glide
+bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+
+# Hilt
+dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
+# Timber
+jakewharton-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
