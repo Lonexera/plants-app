@@ -1,7 +1,8 @@
 [versions]
 agp = "8.3.0"
 kotlin = "1.9.20"
-hilt = "2.52"
+ksp = "1.9.20-1.0.14"
+hilt = "2.49"
 gms = "4.4.2"
 # UI
 appcompat = "1.7.0"
@@ -15,14 +16,14 @@ glide = "4.12.0"
 # Timber
 timber = "5.0.1"
 # Room
-room = "2.6.1"
+room = "2.6.0"
 # Tests
 junit = "4.13.2"
 assertj = "3.18.1"
 coroutines-test = "1.5.1"
 # WorkManager
 work-ktx = "2.7.0"
-hilt-work = "1.0.0"
+androidx-hilt = "1.2.0"
 # Firebase
 firebase-bom = "29.0.0"
 # Play services
@@ -56,8 +57,8 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 
 # WorkManager
 androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work-ktx" }
-androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hilt-work" }
-androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-work" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidx-hilt" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
 
 # Firebase
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
@@ -82,3 +83,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}

@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    id("kotlin-kapt")
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.bumptech.glide)
     // Hilt
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
     // Timber
     implementation(libs.jakewharton.timber)
 }

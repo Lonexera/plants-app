@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.services)
-    id("kotlin-kapt")
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -16,7 +16,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
     }
 
     buildFeatures {
@@ -52,17 +51,17 @@ dependencies {
     implementation(libs.facebook.shimmer)
     // Hilt
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
     // Timber
     implementation(libs.jakewharton.timber)
     // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     // WorkManager
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
     // Firebase
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.google.firebase.firestore)
