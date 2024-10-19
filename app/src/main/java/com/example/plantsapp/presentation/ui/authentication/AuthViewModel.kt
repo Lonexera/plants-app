@@ -38,7 +38,32 @@ class AuthViewModel @Inject constructor(
 
             val state = try {
                 _authState.value = AuthState.Loading
-                authUseCase(AuthUseCase.AuthInput(token))
+                authUseCase(AuthUseCase.AuthInput.Token(token))
+                AuthState.NavigateToTasks
+            } catch (e: Exception) {
+                AuthState.AuthError(R.string.error_unable_to_sign_in)
+            }
+
+            _authState.value = state
+        }
+    }
+
+    fun signIn(email: String, password: String) {
+        viewModelScope.launch {
+            if (email.isBlank() || password.isBlank()) {
+                _authState.value =
+                    AuthState.AuthError(R.string.error_unable_to_sign_in)
+                return@launch
+            }
+
+            val state = try {
+                _authState.value = AuthState.Loading
+                authUseCase(
+                    AuthUseCase.AuthInput.EmailPassword(
+                        email = email,
+                        password = password,
+                    )
+                )
                 AuthState.NavigateToTasks
             } catch (e: Exception) {
                 Timber.e(e)

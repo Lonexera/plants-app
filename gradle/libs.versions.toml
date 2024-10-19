@@ -33,10 +33,10 @@ coroutines-test = "1.5.1"
 work-ktx = "2.7.0"
 androidx-hilt = "1.2.0"
 # Firebase
-firebase-bom = "29.0.0"
+firebase-bom = "33.4.0"
 # Play services
-coroutines-play-services = "1.4.1"
-play-services-auth = "19.2.0"
+coroutines-play-services = "1.8.1"
+play-services-auth = "21.2.0"
 # Shimmering
 shimmer = "0.5.0"
 
