@@ -1,9 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        rootCompileSdk = 31
+        rootCompileSdk = 34
         rootMinSdk = 21
-        rootTargetSdk = 31
+        rootTargetSdk = 34
         rootVersionCode = 1
         rootVersionName = "1.0"
 
