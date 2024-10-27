@@ -56,8 +56,30 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun signIn(email: String, password: String) {
+    fun onEmailChange(newEmail: String) {
+        _authState.update { state ->
+            if (state !is AuthState.Auth) return@update state
+
+            state.copy(email = newEmail)
+        }
+    }
+
+    fun onPasswordChange(newPassword: String) {
+        _authState.update { state ->
+            if (state !is AuthState.Auth) return@update state
+
+            state.copy(password = newPassword)
+        }
+    }
+
+    fun signIn() {
         viewModelScope.launch {
+            val authState = _authState.value
+            if (authState !is AuthState.Auth) return@launch
+
+            val email = authState.email
+            val password = authState.password
+
             if (email.isBlank() || password.isBlank()) {
                 _error.emit(R.string.error_unable_to_sign_in)
                 return@launch

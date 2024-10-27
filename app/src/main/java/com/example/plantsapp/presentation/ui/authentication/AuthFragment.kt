@@ -1,9 +1,12 @@
 package com.example.plantsapp.presentation.ui.authentication
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -23,48 +26,28 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     @Inject
     lateinit var googleSignInClient: GoogleSignInClient
-    private val loadingDialog by lazy { LoadingDialog(requireContext()) }
 
-    private val googleSignInLauncher =
-        registerForActivityResult(
-            GoogleSignInContract { googleSignInClient }
-        ) { token ->
-            viewModel.onSignInResult(token)
-        }
+//    private val googleSignInLauncher =
+//        registerForActivityResult(
+//            GoogleSignInContract { googleSignInClient }
+//        ) { token ->
+//            viewModel.onSignInResult(token)
+//        }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        (activity as AppCompatActivity).supportActionBar?.hide()
-
-        with(viewModel) {
-            authState.observe(viewLifecycleOwner) { state ->
-                when (state) {
-                    is AuthViewModel.AuthState.Loading -> loadingDialog.show()
-
-                    is AuthViewModel.AuthState.NavigateToTasks -> {
-                        loadingDialog.dismiss()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AuthScreen(
+                    viewModel = viewModel,
+                    onNavigateToTasks = {
                         requireActivity().supportFragmentManager.commit {
                             replace(R.id.fragment_container, TasksForDaysFragment())
                         }
                     }
-                    is AuthViewModel.AuthState.AuthError -> {
-                        loadingDialog.dismiss()
-                        Toast.makeText(requireContext(), state.errorId, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            }
-        }
-
-        with(binding) {
-//            btnGoogleSignIn.setOnClickListener {
-//                googleSignInLauncher.launch(null)
-//            }
-            btnGoogleSignIn.setOnClickListener {
-                viewModel.signIn(
-                    email = etEmail.text?.toString().orEmpty(),
-                    password = etPassword.text?.toString().orEmpty(),
                 )
             }
         }
