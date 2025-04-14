@@ -1,10 +1,8 @@
 package com.example.plantsapp.presentation.ui.plantdetail
 
-import android.content.Context
+import android.net.Uri
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,12 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -44,7 +39,6 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -53,8 +47,10 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.example.plantsapp.R
 import com.example.plantsapp.domain.model.Task
 import com.example.plantsapp.presentation.temp.Loading
+import com.example.plantsapp.presentation.ui.utils.formatDate
 import com.example.plantsapp.presentation.ui.utils.getColorRes
 import com.example.plantsapp.presentation.ui.utils.getIconRes
+import java.util.Date
 
 @Composable
 fun PlantDetailScreen(
@@ -164,6 +160,42 @@ private fun PlantDetailScreen(
                         }
                     }
                 }
+
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        text = stringResource(R.string.title_plant_gallery_text),
+                        fontSize = 18.sp,
+                        color = colorResource(R.color.dark_grey),
+                    )
+                }
+
+                item {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.Top,
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                    ) {
+                        when (uiState.photosState) {
+                            PlantDetailViewModel.UiState.PhotosState.Loading -> {
+                                items(count = 3) {
+                                    PhotoSkeletonItem()
+                                }
+                            }
+
+                            is PlantDetailViewModel.UiState.PhotosState.Photos -> {
+                                items(uiState.photosState.photos) { (uri, date) ->
+                                    PhotoItem(
+                                        photo = uri,
+                                        date = date,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -218,7 +250,8 @@ private fun TaskItem(
     }
 }
 
-@StringRes private fun Task.getShortTitleRes():  Int {
+@StringRes
+private fun Task.getShortTitleRes(): Int {
     return when (this) {
         is Task.WateringTask -> R.string.title_plant_detail_watering_task
         is Task.SprayingTask -> R.string.title_plant_detail_spraying_task
@@ -238,3 +271,47 @@ private fun Task.getTaskDetailText(): String {
         )
     )
 }
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+private fun PhotoItem(
+    photo: Uri,
+    date: Date,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier.width(132.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        GlideImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp),
+            model = photo,
+            contentDescription = "Plant picture",
+            contentScale = ContentScale.Crop,
+            failure = placeholder(R.drawable.ic_baseline_image_24),
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 8.dp),
+            text = date.formatDate(DATE_FORMAT_WITH_YEAR),
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun PhotoSkeletonItem() {
+    // TODO: add shimmering effect
+    Box(
+        modifier = Modifier
+            .size(height = 120.dp, width = 132.dp)
+            .background(color = Color.Gray, shape = RoundedCornerShape(8.dp))
+    )
+}
+
+private const val DATE_FORMAT_WITH_YEAR = "d MMM yyyy HH:mm"

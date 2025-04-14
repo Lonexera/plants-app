@@ -10,23 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.plantsapp.R
-import com.example.plantsapp.databinding.FragmentPlantDetailBinding
 import com.example.plantsapp.domain.model.Plant
 import com.example.plantsapp.presentation.ui.loading.LoadingDialog
 import com.example.plantsapp.presentation.ui.loading.hideOnLifecycle
-import com.example.plantsapp.presentation.ui.plantdetail.adapter.PlantPhotosAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlantDetailFragment : Fragment(R.layout.fragment_plant_detail) {
-
-    private val binding: FragmentPlantDetailBinding by viewBinding(FragmentPlantDetailBinding::bind)
 
     @Inject
     lateinit var assistedFactory: DetailViewModelAssistedFactory
@@ -36,7 +30,6 @@ class PlantDetailFragment : Fragment(R.layout.fragment_plant_detail) {
             plantName = requireArguments().plantName
         )
     }
-    private val photosAdapter = PlantPhotosAdapter()
     private val loadingDialog by lazy { LoadingDialog(requireContext()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,67 +58,10 @@ class PlantDetailFragment : Fragment(R.layout.fragment_plant_detail) {
         super.onViewCreated(view, savedInstanceState)
 
         loadingDialog.hideOnLifecycle(viewLifecycleOwner)
-
-//        with(detailViewModel) {
-//            appBarTitle.observe(viewLifecycleOwner) {
-//                activity?.title = it
-//            }
-//
-//            plantDetailUiState.observe(viewLifecycleOwner) { state ->
-//                when (state) {
-//                    is PlantDetailViewModel.PlantDetailUiState.InitialState -> {
-//                        changeLoadingStates(
-//                            isLoadingIndicatorVisible = true,
-//                            isLoadingDialogVisible = false
-//                        )
-//                    }
-//                    is PlantDetailViewModel.PlantDetailUiState.DataIsLoaded -> {
-//                        changeLoadingStates(
-//                            isLoadingIndicatorVisible = false,
-//                            isLoadingDialogVisible = false
-//                        )
-//                        showPlantDetail(state.plant)
-//                        tasksAdapter.submitList(state.tasks)
-//                    }
-//                    is PlantDetailViewModel.PlantDetailUiState.LoadingState -> {
-//                        changeLoadingStates(
-//                            isLoadingIndicatorVisible = false,
-//                            isLoadingDialogVisible = true
-//                        )
-//                    }
-//                    is PlantDetailViewModel.PlantDetailUiState.FinalState -> {
-//                        changeLoadingStates(
-//                            isLoadingIndicatorVisible = false,
-//                            isLoadingDialogVisible = false
-//                        )
-//                        requireActivity().supportFragmentManager.popBackStack()
-//                    }
-//                }
-//            }
-//
-//            plantPhotosUiState.observe(viewLifecycleOwner) { state ->
-//                when (state) {
-//                    is PlantDetailViewModel.PlantPhotosUiState.InitialState -> {
-//                        binding.rvPlantPhotos.isVisible = false
-//                        binding.layoutPlantGalleryShimmering.root.isVisible = true
-//                    }
-//                    is PlantDetailViewModel.PlantPhotosUiState.PhotosAreLoaded -> {
-//                        photosAdapter.submitList(state.photos)
-//                        binding.rvPlantPhotos.isVisible = true
-//                        binding.layoutPlantGalleryShimmering.root.isVisible = false
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_plant_detail_appbar, menu)
-
-//        detailViewModel.plantDetailUiState.observe(viewLifecycleOwner) { state ->
-//            menu.findItem(R.id.action_delete_plant).isVisible =
-//                state is PlantDetailViewModel.PlantDetailUiState.DataIsLoaded
-//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -136,22 +72,6 @@ class PlantDetailFragment : Fragment(R.layout.fragment_plant_detail) {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun showPlantDetail(plant: Plant) {
-        with(binding) {
-            rvPlantPhotos.adapter = photosAdapter
-        }
-    }
-
-    private fun changeLoadingStates(
-        isLoadingIndicatorVisible: Boolean,
-        isLoadingDialogVisible: Boolean
-    ) {
-        binding.pbLoading.isVisible = isLoadingIndicatorVisible
-
-        if (isLoadingDialogVisible) loadingDialog.show()
-        else loadingDialog.dismiss()
     }
 
     private fun showDialogDeleteConfirm() {
