@@ -9,7 +9,6 @@ import com.example.plantsapp.domain.repository.PlantPhotosRepository
 import com.example.plantsapp.domain.repository.UserRepository
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import dagger.internal.ProviderOfLazy
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 import javax.inject.Inject
@@ -24,7 +23,7 @@ class FirestorePlantPhotosRepository @Inject constructor(
     override suspend fun savePhoto(plant: Plant, photoUri: Uri) {
         storageRef.addImage(
             user = userRepository.requireUser(),
-            plant = plant,
+            plantName = plant.name,
             picture = photoUri
         )
     }

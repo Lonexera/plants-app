@@ -1,8 +1,6 @@
 package com.example.plantsapp.presentation.ui.plantcreation
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantsapp.R
@@ -54,9 +52,6 @@ class PlantCreationViewModel @Inject constructor(
         object NavigateBack : Event()
         data class ShowError(val message: Int) : Event()
     }
-
-    private val _selectedPicture: MutableLiveData<Uri> = MutableLiveData()
-    val selectedPicture: LiveData<Uri> get() = _selectedPicture
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -132,6 +127,7 @@ class PlantCreationViewModel @Inject constructor(
                 looseningFrequency = _uiState.value.looseningFrequency,
                 takingPhotoFrequency = _uiState.value.takingPhotoFrequency,
             )
+            val selectedPictureUri = _uiState.value.selectedImageUri
 
             val validationResult = validator.validate(
                 plantName,
@@ -146,7 +142,7 @@ class PlantCreationViewModel @Inject constructor(
                         addPlant(
                             plantName,
                             speciesName,
-                            selectedPicture.value,
+                            selectedPictureUri,
                             frequencies,
                         )
                     } catch (e: Exception) {

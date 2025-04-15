@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,13 @@ fun PlantCreationScreen(
         contract = cameraContract,
     ) { uri ->
         uri?.let { viewModel.onImageCaptured(it) }
+    }
+
+    val galleryContract = remember { ImagePickerContract() }
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = galleryContract,
+    ) { uri ->
+        uri?.let { viewModel.onImageSelected(uri) }
     }
 
     LaunchedEffect(Unit) {
@@ -91,9 +99,10 @@ fun PlantCreationScreen(
                     )
                 } else {
                     Icon(
-                        painter = painterResource(R.drawable.ic_baseline_add_24),
+                        painter = painterResource(R.drawable.ic_baseline_image_24),
                         contentDescription = "Add plant photo",
-                        modifier = Modifier.fillMaxSize()
+                        tint = colorResource(R.color.light_grey),
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
             }
@@ -169,7 +178,10 @@ fun PlantCreationScreen(
 
     if (uiState.showImagePickerDialog) {
         ImagePickerDialog(
-            onGalleryClick = viewModel::onGalleryClick,
+            onGalleryClick = {
+                galleryLauncher.launch(null)
+                viewModel.onImagePickerDismiss()
+            },
             onCameraClick = {
                 val uri = context.getCameraImageOutputUri()
                 cameraLauncher.launch(uri)

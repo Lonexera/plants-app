@@ -70,7 +70,7 @@ class FirebasePlantsRepository @Inject constructor(
         val storageImageUri = plant.plantPicture?.let {
             storageRef.addImage(
                 user = userRepository.requireUser(),
-                plant = plant,
+                plantName = plant.name,
                 picture = it.toUri()
             )
         }

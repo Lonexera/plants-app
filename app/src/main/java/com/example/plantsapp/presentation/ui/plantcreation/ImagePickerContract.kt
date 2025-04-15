@@ -6,9 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 
-class ImagePickerContract : ActivityResultContract<Unit, Uri?>() {
+class ImagePickerContract : ActivityResultContract<Unit?, Uri?>() {
 
-    override fun createIntent(context: Context, input: Unit): Intent {
+    override fun createIntent(context: Context, input: Unit?): Intent {
         return Intent(Intent.ACTION_GET_CONTENT).apply {
             type = MIMETYPE_IMAGE
         }
