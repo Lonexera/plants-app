@@ -110,11 +110,6 @@ class PlantCreationViewModel @Inject constructor(
         _uiState.update { it.copy(showImagePickerDialog = false) }
     }
 
-    fun onCameraClick() {
-        // TODO: Implement camera
-        _uiState.update { it.copy(showImagePickerDialog = false) }
-    }
-
     fun onImageSelected(uri: Uri) {
         viewModelScope.launch {
             try {
@@ -169,9 +164,16 @@ class PlantCreationViewModel @Inject constructor(
     }
 
     fun onImageCaptured(uri: Uri) {
-        _selectedPicture.value = uri
+        viewModelScope.launch {
+            try {
+                val newSavedUri = saveUriInStorageUseCase.saveImage(uri)
+                _uiState.update { it.copy(selectedImageUri = newSavedUri) }
+            } catch (exception: IOException) {
+                Timber.e(exception)
+                _events.emit(Event.ShowError(R.string.error_copying_image))
+            }
+        }
     }
-
 
     @Suppress("LongParameterList")
     private suspend fun addPlant(
