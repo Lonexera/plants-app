@@ -20,14 +20,22 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +55,7 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.example.plantsapp.R
 import com.example.plantsapp.domain.model.Task
 import com.example.plantsapp.presentation.temp.Loading
+import com.example.plantsapp.presentation.ui.common.dialog.ConfirmationDialog
 import com.example.plantsapp.presentation.ui.utils.formatDate
 import com.example.plantsapp.presentation.ui.utils.getColorRes
 import com.example.plantsapp.presentation.ui.utils.getIconRes
@@ -58,6 +67,7 @@ fun PlantDetailScreen(
     onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.closeScreen.collect {
@@ -65,132 +75,179 @@ fun PlantDetailScreen(
         }
     }
 
+    if (showDeleteConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(R.string.title_delete_dialog_confirmation),
+            message = stringResource(R.string.msg_delete_dialog_confirmation),
+            onDismissRequest = { showDeleteConfirmation = false },
+            onConfirm = {
+                viewModel.onDelete()
+            },
+        )
+    }
+
     PlantDetailScreen(
         uiState = uiState,
+        onNavigateBack = onNavigateBack,
+        onDeleteClick = { showDeleteConfirmation = true }
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 private fun PlantDetailScreen(
     uiState: PlantDetailViewModel.UiState,
+    onNavigateBack: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
-    when (uiState.detailState) {
-        PlantDetailViewModel.UiState.PlantDetailState.Loading -> Loading()
-        is PlantDetailViewModel.UiState.PlantDetailState.DataIsLoaded -> {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                item {
-                    GlideImage(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(all = 16.dp)
-                            .clip(RoundedCornerShape(10.dp)),
-                        model = uiState.detailState.plant.plantPicture,
-                        contentDescription = "Plant picture",
-                        contentScale = ContentScale.Crop,
-                        failure = placeholder(R.drawable.ic_baseline_image_24),
-                    )
-                }
-
-                item {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-//                            .padding(horizontal = 16.dp)
-                        ,
-                        value = uiState.detailState.plant.name.value,
-                        onValueChange = {},
-                        readOnly = true,
-                        textStyle = LocalTextStyle.current.copy(fontSize = 20.sp),
-                        label = {
-                            Text(text = stringResource(R.string.hint_detail_plant_name))
-                        },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.Transparent,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(text = uiState.plantName) },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_baseline_arrow_back_24),
+                            contentDescription = "Back"
                         )
-                    )
-                }
-
-                item {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-//                            .padding(horizontal = 16.dp)
-                        ,
-                        value = uiState.detailState.plant.speciesName,
-                        onValueChange = {},
-                        readOnly = true,
-                        textStyle = LocalTextStyle.current.copy(fontSize = 20.sp),
-                        label = {
-                            Text(text = stringResource(R.string.hint_detail_species_name))
-                        },
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.Transparent,
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onDeleteClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete_24),
+                            contentDescription = "Delete"
                         )
-                    )
-                }
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = colorResource(R.color.white),
+                    titleContentColor = colorResource(R.color.dark_grey),
+                    navigationIconContentColor = colorResource(R.color.dark_grey),
+                    actionIconContentColor = colorResource(R.color.dark_grey)
+                )
+            )
+        }
+    ) { paddingValues ->
+        when (uiState.detailState) {
+            PlantDetailViewModel.UiState.PlantDetailState.Loading -> Loading()
+            is PlantDetailViewModel.UiState.PlantDetailState.DataIsLoaded -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
+                        GlideImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .padding(all = 16.dp)
+                                .clip(RoundedCornerShape(10.dp)),
+                            model = uiState.detailState.plant.plantPicture,
+                            contentDescription = "Plant picture",
+                            contentScale = ContentScale.Crop,
+                            failure = placeholder(R.drawable.ic_baseline_image_24),
+                        )
+                    }
 
-                item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        text = stringResource(R.string.title_plant_tasks),
-                        fontSize = 18.sp,
-                        color = colorResource(R.color.dark_grey),
-                    )
-                }
+                    item {
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                            //                            .padding(horizontal = 16.dp)
+                            ,
+                            value = uiState.detailState.plant.name.value,
+                            onValueChange = {},
+                            readOnly = true,
+                            textStyle = LocalTextStyle.current.copy(fontSize = 20.sp),
+                            label = {
+                                Text(text = stringResource(R.string.hint_detail_plant_name))
+                            },
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                            )
+                        )
+                    }
 
-                item {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.Top,
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                    ) {
-                        items(uiState.detailState.tasks) { task ->
-                            TaskItem(task)
+                    item {
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                            //                            .padding(horizontal = 16.dp)
+                            ,
+                            value = uiState.detailState.plant.speciesName,
+                            onValueChange = {},
+                            readOnly = true,
+                            textStyle = LocalTextStyle.current.copy(fontSize = 20.sp),
+                            label = {
+                                Text(text = stringResource(R.string.hint_detail_species_name))
+                            },
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                            )
+                        )
+                    }
+
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            text = stringResource(R.string.title_plant_tasks),
+                            fontSize = 18.sp,
+                            color = colorResource(R.color.dark_grey),
+                        )
+                    }
+
+                    item {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.Top,
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                        ) {
+                            items(uiState.detailState.tasks) { task ->
+                                TaskItem(task)
+                            }
                         }
                     }
-                }
 
-                item {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        text = stringResource(R.string.title_plant_gallery_text),
-                        fontSize = 18.sp,
-                        color = colorResource(R.color.dark_grey),
-                    )
-                }
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            text = stringResource(R.string.title_plant_gallery_text),
+                            fontSize = 18.sp,
+                            color = colorResource(R.color.dark_grey),
+                        )
+                    }
 
-                item {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.Top,
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                    ) {
-                        when (uiState.photosState) {
-                            PlantDetailViewModel.UiState.PhotosState.Loading -> {
-                                items(count = 3) {
-                                    PhotoSkeletonItem()
+                    item {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.Top,
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                        ) {
+                            when (uiState.photosState) {
+                                PlantDetailViewModel.UiState.PhotosState.Loading -> {
+                                    items(count = 3) {
+                                        PhotoSkeletonItem()
+                                    }
                                 }
-                            }
 
-                            is PlantDetailViewModel.UiState.PhotosState.Photos -> {
-                                items(uiState.photosState.photos) { (uri, date) ->
-                                    PhotoItem(
-                                        photo = uri,
-                                        date = date,
-                                    )
+                                is PlantDetailViewModel.UiState.PhotosState.Photos -> {
+                                    items(uiState.photosState.photos) { (uri, date) ->
+                                        PhotoItem(
+                                            photo = uri,
+                                            date = date,
+                                        )
+                                    }
                                 }
                             }
                         }
