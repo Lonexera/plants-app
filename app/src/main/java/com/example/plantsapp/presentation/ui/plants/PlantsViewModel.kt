@@ -13,8 +13,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,7 +43,6 @@ class PlantsViewModel @Inject constructor(
     val event: SharedFlow<Event> get() = _event.asSharedFlow()
 
     private val allPlants = repository.observePlants()
-    private val searchQuery = MutableStateFlow<String>("")
 
     init {
         observeSearchQuery()
@@ -51,7 +51,7 @@ class PlantsViewModel @Inject constructor(
     private fun observeSearchQuery() {
         combine(
             allPlants,
-            searchQuery.debounce(300L)
+            _uiState.map { it.searchQuery }.distinctUntilChanged()
         ) { allPlants, searchQuery ->
             showLoading()
 
@@ -93,6 +93,6 @@ class PlantsViewModel @Inject constructor(
     }
 
     fun onSearchQueryChanged(query: String) {
-        searchQuery.update { query }
+        _uiState.update { it.copy(searchQuery = query) }
     }
 }

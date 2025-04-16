@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.plantsapp.R
 import com.example.plantsapp.domain.model.Plant
 import com.example.plantsapp.presentation.temp.Loading
+import com.example.plantsapp.presentation.ui.common.noitems.NoItemsLayout
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +60,7 @@ fun PlantsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onNavigateToPlantCreation,
+                onClick = viewModel::onAddPlantClicked,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
@@ -98,8 +99,8 @@ fun PlantsScreen(
                 if (uiState.plants.isEmpty()) {
                     NoItemsLayout(
                         imageRes = R.drawable.ic_plant_outlined,
-                        titleRes = R.string.title_no_plants,
-                        messageRes = R.string.msg_no_plants
+                        title = stringResource(R.string.title_no_plants),
+                        message = stringResource(R.string.msg_no_plants),
                     )
                 } else {
                     LazyVerticalGrid(
@@ -112,7 +113,7 @@ fun PlantsScreen(
                         items(uiState.plants) { plant ->
                             PlantItem(
                                 plant = plant,
-                                onClick = { onNavigateToPlantDetail(plant) }
+                                onClick = { viewModel.onPlantClicked(plant) }
                             )
                         }
                     }
