@@ -1,8 +1,6 @@
 package com.example.plantsapp.presentation.ui.tasks
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -89,12 +87,12 @@ fun PlantWithTasksCard(
             )
 
             // Tasks List
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = dimensionResource(R.dimen.margin_8dp))
             ) {
-                items(tasks) { taskWithState ->
+                tasks.forEach { taskWithState ->
                     TaskItem(
                         plant = plant,
                         taskWithState = taskWithState,
