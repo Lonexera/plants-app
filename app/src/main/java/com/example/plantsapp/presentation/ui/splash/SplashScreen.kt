@@ -33,4 +33,4 @@ fun SplashScreen(
         // change to logo
         CircularProgressIndicator()
     }
-} 
+}

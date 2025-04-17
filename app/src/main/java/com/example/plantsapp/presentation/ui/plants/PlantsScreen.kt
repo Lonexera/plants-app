@@ -125,4 +125,4 @@ fun PlantsScreen(
             }
         }
     }
-} 
+}

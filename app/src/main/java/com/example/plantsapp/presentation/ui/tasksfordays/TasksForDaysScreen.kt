@@ -137,4 +137,4 @@ private fun getDateText(
             date.plusDays(offset).formatDate(format)
         }
     }
-} 
+}
