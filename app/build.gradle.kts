@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -90,4 +91,6 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.assertj)
     testImplementation(libs.test.coroutines)
+    // Kotlin Serialization
+    implementation(libs.kotlinx.serialization.json)
 }

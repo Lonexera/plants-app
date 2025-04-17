@@ -1,8 +1,11 @@
 package com.example.plantsapp.presentation.ui.plantdetail
 
 import android.net.Uri
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.plantsapp.di.module.AssistedPlantDetailViewModel
 import com.example.plantsapp.di.module.FirebaseQualifier
 import com.example.plantsapp.domain.model.Plant
 import com.example.plantsapp.domain.model.Task
@@ -12,6 +15,7 @@ import com.example.plantsapp.domain.repository.TasksRepository
 import com.example.plantsapp.domain.usecase.DeletePlantUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,6 +28,7 @@ import timber.log.Timber
 import java.util.Date
 
 @Suppress("TooGenericExceptionCaught")
+@HiltViewModel(assistedFactory = AssistedPlantDetailViewModel::class)
 class PlantDetailViewModel @AssistedInject constructor(
     @FirebaseQualifier private val plantsRepository: PlantsRepository,
     @FirebaseQualifier private val tasksRepository: TasksRepository,
@@ -103,5 +108,14 @@ class PlantDetailViewModel @AssistedInject constructor(
                 Timber.e(e)
             }
         }
+    }
+
+    companion object {
+        @Composable
+        fun provideHiltViewModel(plantName: Plant.Name) =
+            hiltViewModel<PlantDetailViewModel, AssistedPlantDetailViewModel>(
+                key = "PlantDetailViewModel_$plantName",
+                creationCallback = { it.create(plantName) }
+            )
     }
 }
