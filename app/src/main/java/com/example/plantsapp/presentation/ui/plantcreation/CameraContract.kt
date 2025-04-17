@@ -19,6 +19,7 @@ class CameraContract : ActivityResultContract<Uri, Uri?>() {
                 MediaStore.EXTRA_OUTPUT,
                 input
             )
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         }
     }
 

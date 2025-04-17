@@ -39,6 +39,8 @@ coroutines-play-services = "1.8.1"
 play-services-auth = "21.2.0"
 # Shimmering
 shimmer = "0.5.0"
+# Kotlin Serialization
+kotlinxSerializationJson = "1.6.3"
 
 [libraries]
 # UI
@@ -94,6 +96,9 @@ android-gms-play-services-auth = { module = "com.google.android.gms:play-service
 # Shimmering
 facebook-shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 
+# Kotlin Serialization Json
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
 # Unit test
 junit = { module = "junit:junit", version.ref = "junit" }
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
@@ -106,3 +111,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+# Kotlin Serialization
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

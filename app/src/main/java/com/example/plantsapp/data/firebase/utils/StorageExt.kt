@@ -6,12 +6,13 @@ import com.example.plantsapp.domain.model.User
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.tasks.await
 
-suspend fun StorageReference.addImage(user: User, plant: Plant, picture: Uri): Uri {
+@Throws(IllegalArgumentException::class)
+suspend fun StorageReference.addImage(user: User, plantName: Plant.Name, picture: Uri): Uri {
     val storageImagePath = getPictureStoragePath(
         userUid = user.uid,
         pictureName = picture.lastPathSegment
             ?: throw IllegalArgumentException("Provided picture uri has unsupported name!"),
-        plantName = plant.name.value
+        plantName = plantName.value
     )
     return child(storageImagePath)
         .apply {
