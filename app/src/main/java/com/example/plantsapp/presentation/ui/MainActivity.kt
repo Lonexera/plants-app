@@ -11,9 +11,6 @@ import androidx.fragment.app.commit
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.plantsapp.R
 import com.example.plantsapp.databinding.ActivityMainBinding
-import com.example.plantsapp.presentation.ui.plants.PlantsFragment
-import com.example.plantsapp.presentation.ui.profile.ProfileFragment
-import com.example.plantsapp.presentation.ui.tasksfordays.TasksForDaysFragment
 import com.example.plantsapp.presentation.ui.tasksfordays.TasksForDaysScreen
 import dagger.hilt.android.AndroidEntryPoint
 

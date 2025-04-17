@@ -8,8 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.example.plantsapp.R
-import com.example.plantsapp.presentation.ui.authentication.AuthFragment
-import com.example.plantsapp.presentation.ui.tasksfordays.TasksForDaysFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
