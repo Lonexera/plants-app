@@ -1,5 +1,6 @@
 package com.example.plantsapp.presentation.ui.notification
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
@@ -44,6 +46,7 @@ class TaskNotificationManager @Inject constructor(
         notificationManager.cancel(notificationId)
     }
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun showTaskNotifications(
         plant: Plant,
         tasks: List<Task>

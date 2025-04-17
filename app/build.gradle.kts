@@ -20,7 +20,6 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         compose = true
         buildConfig = true
     }
@@ -48,8 +47,6 @@ dependencies {
     implementation(libs.android.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
-    // viewBinding delegate
-    implementation(libs.kirich1409.viewbinding.delegate)
     // Compose UI
     implementation(libs.core.ktx)
     implementation(libs.activity.compose)
