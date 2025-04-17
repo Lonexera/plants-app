@@ -8,7 +8,7 @@ import java.util.Date
 
 @AssistedFactory
 interface AssistedPlantDetailViewModel {
-    fun create(plantName: Plant.Name): PlantDetailViewModel
+    fun create(plantName: String): PlantDetailViewModel
 }
 
 @AssistedFactory

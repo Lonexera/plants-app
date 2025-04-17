@@ -112,7 +112,7 @@ class PlantDetailViewModel @AssistedInject constructor(
 
     companion object {
         @Composable
-        fun provideHiltViewModel(plantName: Plant.Name) =
+        fun provideHiltViewModel(plantName: String) =
             hiltViewModel<PlantDetailViewModel, AssistedPlantDetailViewModel>(
                 key = "PlantDetailViewModel_$plantName",
                 creationCallback = { it.create(plantName) }

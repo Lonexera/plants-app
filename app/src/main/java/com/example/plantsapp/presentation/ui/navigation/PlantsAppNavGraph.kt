@@ -37,7 +37,7 @@ object AppDestination {
     data object PlantCreation
 
     @Serializable
-    data class PlantDetail(@Contextual val plantName: Plant.Name)
+    data class PlantDetail(val plantName: String)
 
     @Serializable
     data object Profile
@@ -79,7 +79,7 @@ fun PlantsAppNavGraph(
         composable<AppDestination.MyPlants> {
             PlantsScreen(
                 viewModel = hiltViewModel(),
-                onNavigateToPlantDetail = { navController.navigate(AppDestination.PlantDetail(it.name)) },
+                onNavigateToPlantDetail = { navController.navigate(AppDestination.PlantDetail(it.name.value)) },
                 onNavigateToPlantCreation = { navController.navigate(AppDestination.PlantCreation)}
             )
         }
