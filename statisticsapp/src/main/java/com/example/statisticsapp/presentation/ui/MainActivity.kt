@@ -1,22 +1,22 @@
 package com.example.statisticsapp.presentation.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
-import com.example.statisticsapp.R
-import com.example.statisticsapp.databinding.ActivityMainBinding
-import com.example.statisticsapp.presentation.ui.statistics.StatisticsFragment
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.statisticsapp.presentation.ui.statistics.StatisticsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContent {
+            StatisticsScreen(
+                viewModel = hiltViewModel(),
+            )
+        }
     }
 }

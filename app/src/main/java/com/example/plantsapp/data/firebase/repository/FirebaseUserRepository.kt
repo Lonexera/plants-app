@@ -20,7 +20,7 @@ class FirebaseUserRepository @Inject constructor(
     }
 
     override fun requireUser(): User =
-        user ?: throw IllegalStateException("User was not authorized!")
+        user ?: throw IllegalStateException("User is not authorized!")
 
     override fun isUserCached(): Boolean = (user != null)
 
