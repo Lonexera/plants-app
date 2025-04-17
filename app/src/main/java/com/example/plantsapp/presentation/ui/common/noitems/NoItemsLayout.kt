@@ -1,7 +1,13 @@
 package com.example.plantsapp.presentation.ui.common.noitems
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -11,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.plantsapp.R
@@ -31,10 +36,9 @@ fun NoItemsLayout(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
+            modifier = Modifier.size(dimensionResource(R.dimen.no_items_image_size)),
             painter = painterResource(id = imageRes),
             contentDescription = null,
-            modifier = Modifier
-                .size(dimensionResource(R.dimen.no_items_image_size)),
             tint = colorResource(R.color.light_grey)
         )
 
@@ -42,9 +46,9 @@ fun NoItemsLayout(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -53,7 +57,7 @@ fun NoItemsLayout(
             text = message,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

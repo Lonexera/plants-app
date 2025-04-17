@@ -23,6 +23,7 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.example.plantsapp.R
 import com.example.plantsapp.presentation.temp.Loading
 import com.example.plantsapp.presentation.ui.utils.getCameraImageOutputUri
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +32,7 @@ fun PlantCreationScreen(
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
 
     val cameraContract = remember { CameraContract() }
