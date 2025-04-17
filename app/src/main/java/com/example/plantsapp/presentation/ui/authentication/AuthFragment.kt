@@ -39,9 +39,9 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 AuthScreen(
                     viewModel = viewModel,
                     onNavigateToTasks = {
-                        requireActivity().supportFragmentManager.commit {
-                            replace(R.id.fragment_container, TasksForDaysFragment())
-                        }
+//                        requireActivity().supportFragmentManager.commit {
+//                            replace(R.id.fragment_container, TasksForDaysFragment())
+//                        }
                     }
                 )
             }

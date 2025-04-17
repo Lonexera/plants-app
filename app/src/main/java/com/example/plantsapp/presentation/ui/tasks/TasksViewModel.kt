@@ -1,8 +1,11 @@
 package com.example.plantsapp.presentation.ui.tasks
 
 import android.net.Uri
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.plantsapp.di.module.AssistedTasksViewModel
 import com.example.plantsapp.di.module.FirebaseQualifier
 import com.example.plantsapp.domain.model.Plant
 import com.example.plantsapp.domain.model.Task
@@ -15,6 +18,7 @@ import com.example.plantsapp.presentation.model.TaskWithState
 import com.example.plantsapp.presentation.ui.utils.isSameDay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,6 +30,7 @@ import timber.log.Timber
 import java.util.Date
 
 @Suppress("TooGenericExceptionCaught")
+@HiltViewModel(assistedFactory = AssistedTasksViewModel::class)
 class TasksViewModel @AssistedInject constructor(
     @FirebaseQualifier private val plantsRepository: PlantsRepository,
     @FirebaseQualifier private val plantPhotosRepository: PlantPhotosRepository,
@@ -123,6 +128,16 @@ class TasksViewModel @AssistedInject constructor(
             task = task,
             isCompleted = isCompleted,
             isCompletable = date.isSameDay(Date())
+        )
+    }
+
+    companion object {
+        @Composable
+        fun provideHiltViewModel(
+            date: Date,
+        ): TasksViewModel = hiltViewModel<TasksViewModel, AssistedTasksViewModel>(
+            key = "TasksViewModel_${date.time}",
+            creationCallback = { it.create(date) }
         )
     }
 }

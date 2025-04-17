@@ -38,8 +38,8 @@ class SplashFragment : Fragment(), LifecycleObserver {
     }
 
     private fun openFragment(fragment: Fragment) {
-        requireActivity().supportFragmentManager.commit {
-            replace(R.id.fragment_container, fragment)
-        }
+//        requireActivity().supportFragmentManager.commit {
+//            replace(R.id.fragment_container, fragment)
+//        }
     }
 }

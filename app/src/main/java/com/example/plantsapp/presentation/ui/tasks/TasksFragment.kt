@@ -16,26 +16,26 @@ import javax.inject.Inject
 // TODO - open camera on creation of task screen
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
-    @Inject
-    lateinit var assistedFactory: TasksViewModelAssistedFactory
-    private val tasksViewModel: TasksViewModel by viewModels {
-        TasksViewModelFactory(
-            assistedFactory = assistedFactory,
-            date = requireArguments().date
-        )
-    }
+//    @Inject
+//    lateinit var assistedFactory: TasksViewModelAssistedFactory
+//    private val tasksViewModel: TasksViewModel by viewModels {
+//        TasksViewModelFactory(
+//            assistedFactory = assistedFactory,
+//            date = requireArguments().date
+//        )
+//    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                TasksScreen(viewModel = tasksViewModel)
-            }
-        }
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return ComposeView(requireContext()).apply {
+//            setContent {
+//                TasksScreen(viewModel = tasksViewModel)
+//            }
+//        }
+//    }
 
     companion object {
         private const val ARGUMENT_DATE = "ARGUMENT_DATE"
