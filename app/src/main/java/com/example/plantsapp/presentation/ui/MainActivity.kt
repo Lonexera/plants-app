@@ -2,84 +2,105 @@ package com.example.plantsapp.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.rememberNavController
 import com.example.plantsapp.R
-import com.example.plantsapp.databinding.ActivityMainBinding
-import com.example.plantsapp.presentation.ui.plants.PlantsFragment
-import com.example.plantsapp.presentation.ui.profile.ProfileFragment
-import com.example.plantsapp.presentation.ui.tasksfordays.TasksForDaysFragment
+import com.example.plantsapp.presentation.ui.navigation.AppDestination
+import com.example.plantsapp.presentation.ui.navigation.PlantsAppNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
-
-    // TODO maybe find a more proper way to handle bottom navigation visibility
-    private val bottomBarVisibilityCallback =
-        BottomBarVisibilityCallback { isBottomBarVisible ->
-            binding.bottomNavigation.isVisible = isBottomBarVisible
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
-        setUpHomeButtonOnAppBar()
+        setContent {
+            val navController = rememberNavController()
+            var selectedBarItem by remember { mutableStateOf(PlantsAppNavigationBarItem.Tasks) }
 
-        supportFragmentManager.registerFragmentLifecycleCallbacks(
-            bottomBarVisibilityCallback,
-            false
-        )
+            Column {
+                PlantsAppNavGraph(
+                    modifier = Modifier.weight(1f),
+                    navController = navController,
+                    onOpenStatisticsApp = { intent -> startActivity(intent) }
+                )
 
-        // TODO set selected item on visible fragment
-        // can be visible Tasks but selected Profile - after signing out and signing in
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.bottom_nav_tasks -> openFragment(TasksForDaysFragment())
-                R.id.bottom_nav_plants -> openFragment(PlantsFragment())
-                R.id.bottom_nav_profile -> openFragment(ProfileFragment())
+                NavigationBar {
+                    PlantsAppNavigationBarItem.entries.forEach { item ->
+                        NavigationBarItem(
+                            selected = selectedBarItem == item,
+                            icon = { item.Icon() },
+                            label = { item.Label() },
+                            onClick = {
+                                when (item) {
+                                    PlantsAppNavigationBarItem.Tasks -> navController.navigate(AppDestination.Tasks)
+                                    PlantsAppNavigationBarItem.MyPlants -> navController.navigate(AppDestination.MyPlants)
+                                    PlantsAppNavigationBarItem.Profile -> navController.navigate(AppDestination.Profile)
+                                }
+                                selectedBarItem = item
+                            },
+                        )
+                    }
+                }
             }
-            true
         }
     }
+}
 
-    override fun onDestroy() {
-        super.onDestroy()
+enum class PlantsAppNavigationBarItem {
+    Tasks,
+    MyPlants,
+    Profile,
+    ;
 
-        supportFragmentManager.unregisterFragmentLifecycleCallbacks(
-            bottomBarVisibilityCallback
-        )
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                supportFragmentManager.popBackStack()
-                true
+    @Composable
+    fun Icon() {
+        when (this) {
+            Tasks -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_home_24),
+                    contentDescription = "Home"
+                )
             }
-            else -> super.onOptionsItemSelected(item)
+            MyPlants -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_plant_24),
+                    contentDescription = "Plant"
+                )
+            }
+            Profile -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_profile_24),
+                    contentDescription = "Profile"
+                )
+            }
         }
     }
 
-    private fun openFragment(fragment: Fragment) {
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        supportFragmentManager.commit {
-            replace(R.id.fragment_container, fragment)
-        }
-    }
-
-    private fun setUpHomeButtonOnAppBar() {
-        supportFragmentManager.addOnBackStackChangedListener {
-            val isHomeButtonVisible = supportFragmentManager.backStackEntryCount > 0
-
-            supportActionBar?.setDisplayHomeAsUpEnabled(isHomeButtonVisible)
-        }
+    @Composable
+    fun Label() {
+        Text(
+            text = stringResource(
+                id = when (this) {
+                    Tasks -> R.string.title_bottom_nav_tasks
+                    MyPlants -> R.string.title_bottom_nav_plants
+                    Profile -> R.string.title_bottom_nav_profile
+                }
+            )
+        )
     }
 }

@@ -2,7 +2,7 @@ package com.example.plantsapp.data.room.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
+import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 import com.example.plantsapp.domain.model.Plant
 import com.example.plantsapp.domain.model.Task

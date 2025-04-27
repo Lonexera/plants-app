@@ -1,11 +1,15 @@
 package com.example.plantsapp.presentation.ui.tasksfordays
 
 import android.content.Intent
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.plantsapp.presentation.core.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
 
@@ -14,16 +18,18 @@ class TasksForDaysViewModel @Inject constructor(
     private val statisticsAppResolver: StatisticsAppResolver
 ) : ViewModel() {
 
-    val todayDate: LiveData<Date> = MutableLiveData(Date())
+    val todayDate: StateFlow<Date> = MutableStateFlow(Date())
 
-    val isStatisticsAppInstalled: LiveData<Boolean> = MutableLiveData(
+    val isStatisticsAppInstalled: StateFlow<Boolean> = MutableStateFlow(
         statisticsAppResolver.isAppInstalled()
     )
 
-    private val _launchStatisticsApp: MutableLiveData<Event<Intent>> = MutableLiveData()
-    val launchStatisticsApp: LiveData<Event<Intent>>get() = _launchStatisticsApp
+    private val _launchStatisticsApp: MutableSharedFlow<Event<Intent>> = MutableSharedFlow()
+    val launchStatisticsApp: SharedFlow<Event<Intent>>get() = _launchStatisticsApp
 
     fun onStatisticsClicked() {
-        _launchStatisticsApp.value = Event(statisticsAppResolver.requireIntent())
+        viewModelScope.launch {
+            _launchStatisticsApp.emit(Event(statisticsAppResolver.requireIntent()))
+        }
     }
 }

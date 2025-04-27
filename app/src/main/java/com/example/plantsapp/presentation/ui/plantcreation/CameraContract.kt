@@ -11,7 +11,7 @@ class CameraContract : ActivityResultContract<Uri, Uri?>() {
 
     private var photoUri: Uri? = null
 
-    override fun createIntent(context: Context, input: Uri?): Intent {
+    override fun createIntent(context: Context, input: Uri): Intent {
         photoUri = input
 
         return Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
@@ -19,6 +19,7 @@ class CameraContract : ActivityResultContract<Uri, Uri?>() {
                 MediaStore.EXTRA_OUTPUT,
                 input
             )
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         }
     }
 

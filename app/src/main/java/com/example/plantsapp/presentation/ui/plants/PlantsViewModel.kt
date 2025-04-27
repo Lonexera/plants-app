@@ -1,69 +1,98 @@
 package com.example.plantsapp.presentation.ui.plants
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plantsapp.di.module.FirebaseQualifier
 import com.example.plantsapp.domain.model.Plant
 import com.example.plantsapp.domain.repository.PlantsRepository
-import com.example.plantsapp.presentation.core.Event
-import com.example.plantsapp.presentation.ui.utils.combineWith
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
-@Suppress("TooGenericExceptionCaught")
 @HiltViewModel
 class PlantsViewModel @Inject constructor(
     @FirebaseQualifier private val repository: PlantsRepository
 ) : ViewModel() {
 
-    private val allPlants: MutableLiveData<List<Plant>> = MutableLiveData()
-    private val filter: MutableLiveData<String> = MutableLiveData("")
-    val filteredPlants: LiveData<List<Plant>> = allPlants.combineWith(filter) { plants, filter ->
-        plants?.filter {
-            it.name.value.contains(filter!!.trim(), ignoreCase = true) ||
-                    it.speciesName.contains(filter.trim(), ignoreCase = true)
-        }
+    data class UiState(
+        val plants: List<Plant> = emptyList(),
+        val searchQuery: String = "",
+        val isLoading: Boolean = false,
+    )
+
+    sealed interface Event {
+        data class NavigateToPlantDetail(val plant: Plant) : Event
+        data object NavigateToPlantCreation : Event
     }
 
-    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> get() = _isLoading
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _clickedPlant: MutableLiveData<Event<Plant>> = MutableLiveData()
-    val clickedPlant: LiveData<Event<Plant>> get() = _clickedPlant
-    private val _toCreation: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val toCreation: LiveData<Event<Unit>> get() = _toCreation
+    private val _event = MutableSharedFlow<Event>()
+    val event: SharedFlow<Event> get() = _event.asSharedFlow()
+
+    private val allPlants = repository.observePlants()
 
     init {
-        viewModelScope.launch {
-            try {
-                _isLoading.value = true
-                repository.observePlants().collect {
-                    allPlants.value = it
+        observeSearchQuery()
+    }
 
-                    _isLoading.value = false
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-            } finally {
-                _isLoading.value = false
+    private fun observeSearchQuery() {
+        combine(
+            allPlants,
+            _uiState.map { it.searchQuery }.distinctUntilChanged()
+        ) { allPlants, searchQuery ->
+            showLoading()
+
+            val filteredPlants = allPlants.filter {
+                it.name.value.contains(searchQuery.trim(), ignoreCase = true) ||
+                        it.speciesName.contains(searchQuery.trim(), ignoreCase = true)
             }
+
+            _uiState.update {
+                it.copy(
+                    plants = filteredPlants,
+                    searchQuery = searchQuery,
+                )
+            }
+
+            hideLoading()
         }
+            .launchIn(viewModelScope)
+    }
+
+    private fun showLoading() {
+        _uiState.update { it.copy(isLoading = true) }
+    }
+
+    private fun hideLoading() {
+        _uiState.update { it.copy(isLoading = false) }
     }
 
     fun onPlantClicked(plant: Plant) {
-        _clickedPlant.value = Event(plant)
+        viewModelScope.launch {
+            _event.emit(Event.NavigateToPlantDetail(plant))
+        }
     }
 
     fun onAddPlantClicked() {
-        _toCreation.value = Event(Unit)
+        viewModelScope.launch {
+            _event.emit(Event.NavigateToPlantCreation)
+        }
     }
 
-    fun onFilterChanged(query: String) {
-        filter.value = query
+    fun onSearchQueryChanged(query: String) {
+        _uiState.update { it.copy(searchQuery = query) }
     }
 }

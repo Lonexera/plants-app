@@ -1,9 +1,12 @@
 package com.example.plantsapp.presentation.ui.utils
 
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.example.plantsapp.R
 import com.example.plantsapp.domain.model.Task
 
-fun Task.getTitleRes(): Int {
+@StringRes fun Task.getTitleRes(): Int {
     return when (this) {
         is Task.WateringTask -> R.string.title_watering_task
         is Task.SprayingTask -> R.string.title_spraying_task
@@ -12,7 +15,7 @@ fun Task.getTitleRes(): Int {
     }
 }
 
-fun Task.getIconRes(): Int {
+@DrawableRes fun Task.getIconRes(): Int {
     return when (this) {
         is Task.WateringTask -> R.drawable.ic_watering
         is Task.SprayingTask -> R.drawable.ic_spraying
@@ -21,7 +24,7 @@ fun Task.getIconRes(): Int {
     }
 }
 
-fun Task.getColorRes(): Int {
+@ColorRes fun Task.getColorRes(): Int {
     return when (this) {
         is Task.WateringTask -> R.color.blue
         is Task.SprayingTask -> R.color.purple
