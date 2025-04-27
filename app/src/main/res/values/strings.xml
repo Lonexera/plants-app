@@ -105,4 +105,11 @@
     <!-- Loading -->
     <string name="title_dialog_loading">Loading...</string>
 
+    <!-- Notification -->
+    <string name="notification_title">Plant Care Reminder</string>
+    <string name="notification_channel_name">Plant Care</string>
+    <string name="notification_channel_description">Daily reminders to take care of your plants</string>
+    <string name="notification_tasks_remaining">You have %d tasks to complete today</string>
+    <string name="notification_no_tasks">No tasks for today</string>
+
 </resources>

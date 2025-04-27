@@ -20,15 +20,35 @@ import androidx.navigation.compose.rememberNavController
 import com.example.plantsapp.R
 import com.example.plantsapp.presentation.ui.navigation.AppDestination
 import com.example.plantsapp.presentation.ui.navigation.PlantsAppNavGraph
+import com.example.plantsapp.presentation.ui.notification.PlantCareNotificationManager
+import com.example.plantsapp.presentation.ui.permission.PermissionRequestHandler
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var permissionRequestHandler: PermissionRequestHandler
+    @Inject
+    lateinit var notificationManager: PlantCareNotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+            permissionRequestHandler.RequestNotificationPermission(
+                onPermissionGranted = {
+                    // Start notifications
+                    notificationManager.scheduleDailyNotification()
+                },
+                onPermissionDenied = {
+                    // Handle permission denied
+                    // Maybe show a dialog explaining why notifications are important
+                }
+            )
+
+
             val navController = rememberNavController()
             var selectedBarItem by remember { mutableStateOf(PlantsAppNavigationBarItem.Tasks) }
 
