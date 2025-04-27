@@ -1,48 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PlantsApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-
-        <item name="colorPrimary">@color/green_primary</item>
-        <item name="colorPrimaryVariant">@color/green_secondary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/color_secondary</item>
-        <item name="colorAccent">@color/color_secondary</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-    </style>
-
-    <!-- Text Input Layout Style -->
-    <style name="Widget.Plant.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"/>
-    <style name="Widget.Plant.TextInputLayout.WithoutLine" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="boxStrokeWidth">0dp</item>
-    </style>
-    <style name="Widget.Plant.TextInputEditText.DisableEdit" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="android:focusable">false</item>
-        <item name="android:cursorVisible">false</item>
-    </style>
-
-    <!-- Dates Button Style -->
-    <style name="PlantsApp.Dates.Button" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">@android:color/darker_gray</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="textAllCaps">false</item>
-    </style>
-
-    <!-- Rounded Image Style -->
-    <style name="ShapeAppearanceOverlay.PlantsApp.CornerSize12Percent" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">12%</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.PlantsApp.Circle" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
-    <!-- Loading Indicator Style -->
-    <style name="Widget.PlantsApp.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
-        <item name="indicatorColor">?attr/colorAccent</item>
-        <item name="android:indeterminate">true</item>
-    </style>
+    <style name="Theme.PlantsApp" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
 </resources>
